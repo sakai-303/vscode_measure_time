@@ -1,26 +1,24 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { Vtc } from './vtc'
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vtc" is now active!');
+	const vtc = new Vtc
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vtc.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from vscode_time_counter!');
-	});
+	context.subscriptions.push(
+		vscode.commands.registerCommand('vtc.set-lang-python', () => {
+			vtc.set_lang('python')
+			vscode.window.showInformationMessage('set Python');
+		})
+	)
+	context.subscriptions.push(
+		vscode.commands.registerCommand('vtc.set-lang-vue', () => {
+			vtc.set_lang('vue')
+			vscode.window.showInformationMessage('set Vue')
+		})
+	)
 
-	context.subscriptions.push(disposable);
+	vtc.run()
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+}

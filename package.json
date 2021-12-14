@@ -1,5 +1,5 @@
 {
-  "name": "vtc",
+	"name": "vtc",
 	"displayName": "vscode_time_counter",
 	"description": "",
 	"version": "0.0.1",
@@ -10,14 +10,18 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:vtc.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "vtc.helloWorld",
-				"title": "Hello World"
+				"command": "vtc.set-lang-python",
+				"title": "set-write-lang: Python"
+			},
+			{
+				"command": "vtc.set-lang-vue",
+				"title": "set-write-lang: Vue"
 			}
 		]
 	},
@@ -41,5 +45,8 @@
 		"mocha": "^9.1.3",
 		"typescript": "^4.4.4",
 		"@vscode/test-electron": "^1.6.2"
+	},
+	"dependencies": {
+		"axios": "^0.24.0"
 	}
 }
