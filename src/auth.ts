@@ -3,28 +3,26 @@ import { initializeApp } from 'firebase/app'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
 export function auth(gState: vscode.Memento){
-    const localStorage = new LocalStorageService(gState)
-
     inputIdPass().then(
         (idPass) => {
             if (idPass == undefined){
                 return
             }
             let id = idPass[0]
-            let pass = idPass[1
-            ]
-            getFiraBase(id, pass, localStorage)
+            let pass = idPass[1]
+            getFiraBase(id, pass, gState)
         }
     )
 }
 
-function getFiraBase(id: string, pass: string, storage: LocalStorageService) {
+function getFiraBase(id: string, pass: string, storage: vscode.Memento) {
     initFirebase()
     const auth = getAuth()
     
     signInWithEmailAndPassword(auth, id, pass).then(
         (userCredential) => {
-            storage.setValue('token', userCredential)
+            storage.update('token', userCredential)
+            console.log(storage.get('token', ''))
         }
     )
 }
@@ -60,21 +58,8 @@ async function inputIdPass(): Promise<[id: string, pass: string] | undefined> {
     return [id, pass]
 }
 
-class LocalStorageService{
-    constructor(private storage: vscode.Memento){ }
-
-    public getValue(key: string){
-        return this.storage.get(key)
-    }
-
-    public setValue(key: string, value: any){
-        this.storage.update(key, value)
-    }
-}
-
-export function authTest(gState: vscode.Memento){
-    const localStorage = new LocalStorageService(gState)
-    let token = localStorage.getValue('token')
+export function authTest(storage: vscode.Memento){
+    let token = storage.get('token')
 
     console.log(token)
 }
