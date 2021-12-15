@@ -23,7 +23,9 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 	)
 	context.subscriptions.push(
-		vscode.commands.registerCommand('authTest', authTest)
+		vscode.commands.registerCommand('authTest', () => {
+			authTest(context.globalState)
+		})
 	)
 
 	vtc.run()
