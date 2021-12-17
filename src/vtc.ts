@@ -29,3 +29,7 @@ export class Vtc {
         return new Promise(resolve => setTimeout(resolve, sec*1000))
     }
 }
+
+// function sendTime(character, time){
+//     const docRef = doc()
+// }

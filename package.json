@@ -30,6 +30,10 @@
 			{
 				"command": "authTest",
 				"title": "auth_test"
+			},
+			{
+				"command": "setCordingTime",
+				"title": "set_cording_time"
 			}
 		]
 	},

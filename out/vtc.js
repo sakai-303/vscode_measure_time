@@ -26,4 +26,7 @@ class Vtc {
     }
 }
 exports.Vtc = Vtc;
+// function sendTime(character, time){
+//     const docRef = doc()
+// }
 //# sourceMappingURL=vtc.js.map
