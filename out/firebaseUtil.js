@@ -7,7 +7,10 @@ const auth_1 = require("firebase/auth");
 const firestore_1 = require("firebase/firestore");
 class FireBaseUtil {
     constructor(_storage) {
+        this.characterIds = {};
         this.storage = _storage;
+        this.initFirebase();
+        this.getCharacterIds();
     }
     initFirebase() {
         const firebase_config = {
@@ -29,16 +32,26 @@ class FireBaseUtil {
             vscode.window.showWarningMessage("サインインに失敗しました");
         });
     }
-    async setCordingTime(characterId, codingTimeAdd) {
+    async setCordingTime(characterName, codingTimeAdd) {
         const uid = this.storage.get('userToken').user.uid;
+        const characterId = this.characterIds[characterName];
         const docRef = (0, firestore_1.doc)(this.firestore, "users", uid, "characters", characterId);
-        let docSnap = await (0, firestore_1.getDoc)(docRef).then();
+        let docSnap = await (0, firestore_1.getDoc)(docRef);
         let userCharaData = docSnap.data();
         if (userCharaData != undefined) {
             let codingTime = userCharaData["codingTime"];
             let docData = { "codingTime": codingTime + codingTimeAdd };
             await (0, firestore_1.setDoc)(docRef, docData);
-            console.log("送信に成功");
+        }
+    }
+    async getCharacterIds() {
+        const colRef = (0, firestore_1.collection)(this.firestore, "characters");
+        this.firestore;
+        let docSnap = await (0, firestore_1.getDocs)(colRef);
+        for (let doc of docSnap.docs) {
+            let characterName = doc.data()["name"];
+            let characterId = doc.id;
+            this.characterIds[characterName] = characterId;
         }
     }
 }

@@ -16,20 +16,20 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "vtc.set-lang-python",
-				"title": "set-write-lang: Python"
+				"command": "set-lang:Java",
+				"title": "vtc.set-lang:Java"
 			},
 			{
-				"command": "vtc.set-lang-vue",
-				"title": "set-write-lang: Vue"
+				"command": "set-lang:Kotlin",
+				"title": "vtc.set-lang:Kotlin"
+			},
+			{
+				"command": "set-lang:Flutter",
+				"title": "vtc.set-lang:Flutter"
 			},
 			{
 				"command": "auth",
 				"title": "auth"
-			},
-			{
-				"command": "authTest",
-				"title": "auth_test"
 			},
 			{
 				"command": "setCordingTime",

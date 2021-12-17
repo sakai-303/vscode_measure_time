@@ -33,10 +33,3 @@ async function inputIdPass(): Promise<[id: string, pass: string] | undefined> {
 
     return [id, pass]
 }
-
-export function authTest(storage: vscode.Memento){
-    let token = storage.get('userToken')
-
-    console.log(token.user)
-}
-

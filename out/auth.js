@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authTest = exports.signIn = void 0;
+exports.signIn = void 0;
 const vscode = require("vscode");
 function signIn(fireBaseUtil) {
     inputIdPass().then((idPass) => {
@@ -29,9 +29,4 @@ async function inputIdPass() {
     }
     return [id, pass];
 }
-function authTest(storage) {
-    let token = storage.get('userToken');
-    console.log(token.user);
-}
-exports.authTest = authTest;
 //# sourceMappingURL=auth.js.map

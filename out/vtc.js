@@ -2,22 +2,38 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Vtc = void 0;
 class Vtc {
-    constructor() {
+    constructor(firebaseUtil) {
         this.writingLang = '';
-        this.lastSendTime = Date.now();
+        this.lastTime = Date.now();
+        this.firebaseUtil = firebaseUtil;
     }
     async run() {
         while (1) {
             await this.sleep(10);
             if (this.writingLang != '') {
                 //送信メソッド
-                console.log(this.writingLang, Date.now() - this.lastSendTime);
+                let timeAdd = Math.floor((Date.now() - this.lastTime) / 1000);
+                this.firebaseUtil.setCordingTime(this.writingLang, timeAdd);
+                this.lastTime = Date.now();
             }
+        }
+    }
+    setLangExtension(fileName) {
+        let javaRegx = new RegExp(".*\.java");
+        let kotlinRegx = new RegExp(".*\.kt");
+        if (javaRegx.test(fileName)) {
+            this.setLang("Java");
+        }
+        else if (kotlinRegx.test(fileName)) {
+            this.setLang("Kotlin");
+        }
+        else {
+            this.writingLang = '';
         }
     }
     setLang(lang) {
         if (this.writingLang != '') {
-            this.lastSendTime = Date.now();
+            this.lastTime = Date.now();
         }
         this.writingLang = lang;
     }
@@ -26,7 +42,4 @@ class Vtc {
     }
 }
 exports.Vtc = Vtc;
-// function sendTime(character, time){
-//     const docRef = doc()
-// }
 //# sourceMappingURL=vtc.js.map

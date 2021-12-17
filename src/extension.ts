@@ -1,28 +1,37 @@
 import * as vscode from 'vscode';
 import { Vtc } from './vtc'
-import { signIn, authTest } from './auth'
+import { signIn } from './auth'
 import { FireBaseUtil } from './firebaseUtil';
 
 export function activate(context: vscode.ExtensionContext) {
 	let gStorage = context.globalState
-	const vtc = new Vtc
 	const fireBaseUtil = new FireBaseUtil(gStorage)
+	const vtc = new Vtc(fireBaseUtil)
 
-	fireBaseUtil.initFirebase()
-	//getFirestoreToken(context.globalState)	
+	// tokenが無ければsignInを起動
+	if (gStorage.get("userToken") == undefined){
+		signIn(fireBaseUtil)
+	}
 
-	// python
+	// Java
 	context.subscriptions.push(
-		vscode.commands.registerCommand('vtc.set-lang-python', () => {
-			vtc.setLang('python')
-			vscode.window.showInformationMessage('set Python');
+		vscode.commands.registerCommand('set-lang:Java', () => {
+			vtc.setLang('Java')
+			vscode.window.showInformationMessage('set Java');
 		})
 	)
-	// vue
+	// Kotlin
 	context.subscriptions.push(
-		vscode.commands.registerCommand('vtc.set-lang-vue', () => {
-			vtc.setLang('vue')
-			vscode.window.showInformationMessage('set Vue')
+		vscode.commands.registerCommand('set-lang:Kotlin', () => {
+			vtc.setLang('Kotlin')
+			vscode.window.showInformationMessage('set Kotlin')
+		})
+	)
+	// Flutter
+	context.subscriptions.push(
+		vscode.commands.registerCommand('set-lang:Flutter', () => {
+			vtc.setLang('Flutter')
+			vscode.window.showInformationMessage("set Flutter")
 		})
 	)
 	// ログイン
@@ -31,18 +40,15 @@ export function activate(context: vscode.ExtensionContext) {
 			signIn(fireBaseUtil)
 		})
 	)
-	// authテスト
-	context.subscriptions.push(
-		vscode.commands.registerCommand('authTest', () => {
-			authTest(gStorage)
-		})
-	)
-	// setCordingTime
-	context.subscriptions.push(
-		vscode.commands.registerCommand('setCordingTime', () => {
-			fireBaseUtil.setCordingTime("8ketSspB29eQuCDLLHvG", 1)
-		})
-	)
+
+	vscode.window.onDidChangeActiveTextEditor((editor) => {
+		if (editor != undefined){
+			vtc.setLangExtension(editor.document.fileName)
+		}
+		else{
+			vtc.setLangExtension('')
+		}
+	})
 
 	vtc.run()
 }

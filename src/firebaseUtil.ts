@@ -1,18 +1,21 @@
 import * as vscode from 'vscode'
 import { initializeApp } from 'firebase/app'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
-import { getFirestore, getDoc, setDoc, doc } from "firebase/firestore"
+import { getFirestore, getDoc, setDoc, doc, collection, getDocs } from "firebase/firestore"
 
 
 export class FireBaseUtil{
 
     storage: vscode.Memento
     firestore: any
+    characterIds: {[name: string]: string} = {}
     constructor(_storage: vscode.Memento){
         this.storage = _storage
+        this.initFirebase()
+        this.getCharacterIds()
     }
 
-    public initFirebase(){
+    private initFirebase(){
         const firebase_config = {
             apiKey: 'AIzaSyAk8QXcTK4ZUe1CvTU9uYvceieuHEu_HSk',
             authDomain: 'vue-firebase-8d9e2.firebaseapp.com"',
@@ -39,8 +42,9 @@ export class FireBaseUtil{
         )
     }
 
-    public async setCordingTime(characterId: string, codingTimeAdd: number){
+    public async setCordingTime(characterName: string, codingTimeAdd: number){
         const uid = this.storage.get('userToken').user.uid
+        const characterId = this.characterIds[characterName]
         const docRef = doc(
             this.firestore,
             "users",
@@ -49,14 +53,29 @@ export class FireBaseUtil{
             characterId
         )
         
-        let docSnap = await getDoc(docRef).then()
+        let docSnap = await getDoc(docRef)
         let userCharaData = docSnap.data()
         
         if (userCharaData != undefined){
             let codingTime = userCharaData["codingTime"]
             let docData = {"codingTime": codingTime + codingTimeAdd}
             await setDoc(docRef, docData)
-            console.log("送信に成功")
+        }
+    }
+
+    private async getCharacterIds(){
+        const colRef = collection(
+            this.firestore,
+            "characters"
+        )
+        
+        this.firestore
+        let docSnap = await getDocs(colRef)
+
+        for (let doc of docSnap.docs){
+            let characterName: string = doc.data()["name"]
+            let characterId: string = doc.id
+            this.characterIds[characterName] = characterId
         }
     }
 }
